@@ -38,18 +38,16 @@ function ViewBlogs() {
       };
 
     useEffect(() => {
-        // handleRetrieve();
-        // fetch('http://localhost:4000/get-all-posts')
-        // .then(response => response)
-        // .then(data => console.log(data));
         async function fetchItems() {
             try {
-              const response = await fetch('/api/items');
+              const response = await fetch('http://localhost:4000/get-all-posts');
+              //console.log(response)
               if (response.ok) {
                 const data = await response.json();
+                console.log(data)
                 setPosts(data);
               } else {
-                console.error('Error fetching items:', response.statusText);
+                console.error('Error fetching items!:', response.statusText);
               }
             } catch (error) {
               console.error('Error fetching items:', error);
@@ -61,16 +59,28 @@ function ViewBlogs() {
 
   return (
     <div>
-      <h1>ViewBlogs</h1>
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
+            <div className="container-fluid">
+                <div className="row">
+                   <h5>{post.title}</h5>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <p>{post.createdAt}</p>
+                    </div>
+                    <div className="col">
+                        <p>{post.content}</p>
+                    </div>
+                </div>
+            </div>
             {post.caption}
           </li>
         ))}
       </ul>
-      <p>{posts}</p>
-      <p>{message}</p>
+      {/* <p>{posts}</p>
+      <p>{message}</p> */}
     </div>
   );
 }

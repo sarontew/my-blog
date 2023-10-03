@@ -7,9 +7,7 @@ const cors = require('cors');
 
 const app = express()
 
-app.use(cors({
-        origin: 'http://localhost:3000',
-}));
+app.use(cors());
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost/appdb")
@@ -26,11 +24,20 @@ mongoose.connect("mongodb://localhost/appdb")
 
 let storedCaption = '';
 
-app.post('/store-caption', (req, res) => {
-    const { caption } = req.body;
-    storedCaption = caption;
-    addnewpost()
-    //res.status(200).json({ message: 'Caption stored successfully' });
+app.post('/add-blog-post', async (req, res) => {
+    const {title, content, author} = req.body;
+    try {
+        const newPost = new Post({
+          title,
+          content,
+          author,
+        });
+        await newPost.save();
+        res.status(201).json({ message: 'Blog post created successfully.' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
   });
 
   // GET route to retrieve the stored caption
@@ -38,7 +45,7 @@ app.post('/store-caption', (req, res) => {
     res.status(200).json({ caption: storedCaption });
   });
 
-  app.get('/api/items', async (req, res) => {
+  app.get('/get-all-posts', async (req, res) => {
     try {
       const items = await Post.find();
       res.json(items);
@@ -46,22 +53,6 @@ app.post('/store-caption', (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
-  app.get('/get-all-posts', function(req, res) {
-    // console.log("tries to fetch psots")
-    // Post.find({}, function(err, posts) {
-    //   var postMap = {};
-
-    //   posts.forEach(function(post) {
-    //     postMap[post._id] = post;
-    //   });
-
-    //   res.send(postMap.json());
-    // });
-    console.log("serverjs")
-    res.send("hi")
-  });
-
 
 async function addnewpost(){
     console.log("tried to create a new post")

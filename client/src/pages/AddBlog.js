@@ -3,70 +3,54 @@ import React, {useState, useEffect} from "react";
 function AddBlog() {
   const [caption, setCaption] = useState('');
   const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    author: '',
+  });
 
   const handleChange = (event) => {
     setCaption(event.target.value);
   }
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try{
-      const response = await fetch('http://localhost:4000/store-caption',{
+      const response = await fetch('http://localhost:4000/add-blog-post',{
         method : 'POST',
         headers: {
           'Content-Type' : 'application/json'
         },
-        body : JSON.stringify({caption}),
+        body : JSON.stringify(formData),
       });
 
       if (response.ok) {
-        setMessage('Caption stored successfully.');
+        console.log('Form submitted:', formData);
+        setFormData({ title: '', content: '', author: '' });
       } else {
-        setMessage('Error storing caption.');
+        setMessage('Error storing form data');
       }
     }catch (error) {
-      console.error('Error storing caption:', error);
-      setMessage('Error storing caption.');
-    }
-  };
-
-  const handleRetrieve = async () => {
-    try {
-      const response = await fetch('http://localhost:4000/get-caption');
-
-      if (response.ok) {
-        const data = await response.json();
-        setMessage(`Retrieved Caption: ${data.caption}`);
-      } else {
-        setMessage('Error retrieving caption.');
-      }
-    } catch (error) {
-      console.error('Error retrieving caption:', error);
-      setMessage('Error retrieving caption.');
+      console.error('Error storing form data', error);
     }
   };
 
 
   return (
     <div>
-    {/* <div>
-      <button>Add A BLOG</button>
-    </div> */}
-
        <div className="container-fluid">
-         {/* <div className="row p-4 bg-success">
-           <div className="col-3">
-             <p className="display-5">Saron's Blog</p>
-           </div>
-           <div className="col-7"></div>
-           <div className="col-2">
-             <button className="btn btn-lg btn-outline-light">New</button>
-           </div>
-         </div> */}
          <div className="row mx-3">
           <p className="display-6">New Blog Post</p>
             <div className="col">
-             <form onSubmit={handleSubmit}>
+             {/* <form onSubmit={handleSubmit}>
                <div>
                  <textarea type="text"
                  id="caption"
@@ -76,7 +60,54 @@ function AddBlog() {
                  />
                </div>
                <button className="btn btn-lg btn-outline-dark m-4" type="submit">Submit</button>
-             </form>
+             </form> */}
+
+       <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">
+            Title
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="content" className="form-label">
+            Content
+          </label>
+          <textarea
+            className="form-control"
+            id="content"
+            name="content"
+            value={formData.content}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="author" className="form-label">
+            Author
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="author"
+            name="author"
+            value={formData.author}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </form>
            </div>
            <p>{message}</p>
          </div>

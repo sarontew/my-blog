@@ -158,9 +158,6 @@ return (
       <Route path="/addblog" element={<AddBlog/>}/>
       <Route path="/get-all-posts" element={<ViewBlogs/>}/>
     </Routes>
-    <div>
-      <ViewBlogs></ViewBlogs>
-    </div>
   </Router>
 );
  }
