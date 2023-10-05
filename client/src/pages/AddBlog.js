@@ -1,17 +1,12 @@
 import React, {useState, useEffect} from "react";
 
 function AddBlog() {
-  const [caption, setCaption] = useState('');
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     author: '',
   });
-
-  const handleChange = (event) => {
-    setCaption(event.target.value);
-  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,17 +45,6 @@ function AddBlog() {
          <div className="row mx-3">
           <p className="display-6">New Blog Post</p>
             <div className="col">
-             {/* <form onSubmit={handleSubmit}>
-               <div>
-                 <textarea type="text"
-                 id="caption"
-                 name="caption"
-                 value={caption}
-                 onChange={handleChange}
-                 />
-               </div>
-               <button className="btn btn-lg btn-outline-dark m-4" type="submit">Submit</button>
-             </form> */}
 
        <form onSubmit={handleSubmit}>
         <div className="mb-3">
