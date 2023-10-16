@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const User = require("./User")
 const Post = require("./Post")
 
 const express = require('express')
@@ -7,7 +6,8 @@ const cors = require('cors');
 
 const app = express()
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
+
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost/appdb")
@@ -35,6 +35,20 @@ app.post('/add-blog-post', async (req, res) => {
       const items = await Post.find();
       res.json(items);
     } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/get-posts-by-word', async (req, res) => {
+    const word = req.query.word;
+    console.log("Received search term:", word);
+    try {
+      const posts = await Post.find({
+        content: { $regex: word, $options: 'i' }
+      });
+      res.json(posts);
+    } catch (error) {
+      console.error('Error in /get-posts-by-word:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });

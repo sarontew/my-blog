@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from "react";
+import SearchBar from "../components/SearchBar";
 
 function ViewBlogs() {
 
     const [posts, setPosts] = useState([])
+    const data = []
 
     useEffect(() => {
         async function fetchItems() {
@@ -25,6 +27,13 @@ function ViewBlogs() {
 
   return (
     <div>
+      <div className="container-fluid">
+        <div className="row mx-3">
+          <div className="col-0"></div>
+          <div className="col-11">
+          <SearchBar data={data} /></div>
+        </div>
+      </div>
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
@@ -45,6 +54,7 @@ function ViewBlogs() {
           </li>
         ))}
       </ul>
+
     </div>
   );
 }
