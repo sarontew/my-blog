@@ -7,6 +7,7 @@ function SearchBar() {
   const fetchData = async () => {
     try {
       const response = await fetch(`http://localhost:4000/get-posts-by-word?word=${encodeURIComponent(searchTerm)}`);
+
       if (response.ok) {
         const data = await response.json();
         setSearchResults(data.word);
@@ -14,6 +15,7 @@ function SearchBar() {
         console.error('Failed to fetch data');
       }
     } catch (error) {
+      console.log(searchTerm)
       console.error('Error fetching data!:', error);
     }
   };
@@ -50,15 +52,15 @@ function SearchBar() {
       <div className="row mt-3">
         <div className="col-12 col-md-6 offset-md-3">
             {searchResults[0]?
-            <ul className="list-group">
+            <ul>
             {searchResults.map((item, index) => (
-              <li key={index} className="list-group-item">
+              <li key={index}>
                 {item.content}
               </li>
                 ))}
             </ul>
 
-            :<p>Nothing</p>}
+            :<p></p>}
         </div>
       </div>
     </div>
